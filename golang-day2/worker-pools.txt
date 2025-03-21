@@ -1,0 +1,94 @@
+
+This textfile contains from worker-pools till  Statement-goroutine.
+
+1) Worker pool:
+Worker Pool (aka Thread Pool) is a pattern to achieve concurrency using a fixed number of workers to execute multiple tasks on a queue. 
+- These are implemented using goroutine and go channels
+There is a flow in which this is done:
+    a) set up a worker function outside main - these receive work on jobs channel and send results on the results channel.
+    b) Make 2 channels - jobs and results- to send work and receive results.
+    c) This starts up 3 workers, initially blocked because there are no jobs yet.
+    d)Here we send 5 jobs and then close that channel to indicate that’s all the work we have.
+    e)Finally we collect all the results of the work. This also ensures that the worker goroutines have finished. 
+
+    see document, and code , better.
+
+    ** Better understand code thru gpt. 
+
+
+2) Wait groups:
+We use this to wait for multiple goroutine to finish.
+
+
+**************  This is the function we will use in every go routine: *****************
+func worker(id int) {
+    fmt.Printf("Worker %d starting\n", id)
+
+    time.Sleep(time.Second) //we use sleep to simulate an expensive task.
+    fmt.Printf("Worker %d done\n", id)
+}
+
+var wg sync.WaitGroup -  This WaitGroup is used to wait for all the goroutines launched here to finish.
+
+*** NOTE : IF wait group is explicitly passed through functions, it should be done thru pointer.
+
+Wrap the worker call in a closure that makes sure to tell the WaitGroup that this worker is done.
+
+Block until the WaitGroup counter goes back to 0; all the workers notified they’re done.
+
+Note that this approach has no straightforward way to propagate errors from workers
+
+The order of workers starting up and finishing is likely to be different for each invocation.
+
+GPT the code only.
+
+3)Atomic-counters:
+-Common way to manage state in go is thru communication over channels. Ex: in worker pools
+-Other options for managing state exists, here , we’ll look at using:
+     sync/atomic package for  atomic counters accessed bby multiple go-routines.
+
+- IN the exammple , declaration of atomic counter is done like this:
+        var ops atomic.Uint64
+
+    And To atomically increment the counter we use Add: 
+
+        ops.Add(1)
+
+- *** Atomic counters allows for safe, concurrent updates to a value (like an integer) without the need for explicit locking.
+meaning, multiple goroutines can read and modify the counter simultaneously without causing race conditions.
+
+Useful:
+When many threads need to access and update a shared counter  efficiently.
+
+
+4)Mutexes:
+-Another way of managing state like the atomic-counters above.
+-For more complex state we can use a mutex to safely access data across multiple goroutines.
+-since we want to update it concurrently from multiple goroutines, we add a Mutex to synchronize access. 
+- NOte: Mutex must not be copied, it should be passed around through pointer.
+
+-Lock the mutex before accessing counters; unlock it at the end of the function using a defer statement.
+
+- Run several goroutines concurrently; note that they all access the same Container, and two of them access the same counter.
+
+5)Statement goroutine:
+-  State management task only using goroutine and channels.
+-  statement goroutine is built-in synchronization features of goroutines and channels to achieve the same result. 
+- piece of data is owned by exactly one goroutine.
+
+-IN the example given , our state will be owned by single goroutine- which guearentees that data is never corrupted with concurrent access.
+- response is executed by first performing the requested operation and then sending a value on the response channel resp to indicate success.
+-goroutine -based approach is useful in 
+-where you have other channels involved or when managing multiple such mutexes would be error-prone.
+
+-You should use whichever approach feels most natural, especially with respect to understanding the correctness of your program.
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+->Helmfile is basically a command which will help you create a base of your deployment.
+-> Helmfile is the base command which will be taking your commit-id and deploying changes onto some environment into cloud.
+
+HELMFILE IS A MEDIATOR BETWEEN K8 and LOCAL properties.
+
+-> brew install devspace -> to do hot reloading 
+
+************** THIS ENTIRE TXT FILE REFERS TO THIS LINK - "https://drive.google.com/file/d/1vR8mNpt-WgGlSHVTxWn4xb_rdG9mjdyn/view" ****************
+
+---------- This entire video contains 3 parts. 1)normal dev stack work  2)Hard/Hot reloading  3) 
+1)ST PART:
+So devstack usecase will help you in deploying the changes with a customized seperate URL so no once can hamper with your changes.
+Helmfile Commands:
+1) helmfile sync : which syncs all the changes to github, takes all the changes which you have done in the commit-id and deploy there.
+2) helmfile delete : helps you delete those pods which have devstack label (ex: api-jasmeet)
+
+
+2 ways to access the POD (17:48)
+
+2)ND PART:
+How hard reloading works (24:48 - 27:20)
+-simple changes will be made in  a go and you do not have to make helmfile sync again.
+
+27:22 -    ->Smthng idk 
+
+34:02 -     -> Changing the links in the API? admin dashboard to API ig.
+
+
+3) idk properly
+
+4) When you deploy some changes on your dev stack and you want to add a new route:(44:50 - ):
+basically youve deployed some changes using the helmfile sync and now you want to add a new route/ change route of some service or change 
+the permission of a route -> This thing wont be reflected using "hot reloading" command
+
+
+
+See what these commands do:
+-kubectl config use context dev-serve
+-kubectl get pods -n api
+-kubectl logs <your-pod-name> -n api -> If you want to access the log of a specific pod.
+-kubectl logs <your-pod-name> -n api -f -> Itll come in read state and continue reading.
+-devspace dev -> will find your pod and come to a log streaming form.
+-kubectl get pods -n terminals
+-kubectl logs terminals-live-jasmeet -n terminals -f 
+-kubectl -n api exec -it api-web-jasmeet -- sh -->THis will give you shell access of your pod.

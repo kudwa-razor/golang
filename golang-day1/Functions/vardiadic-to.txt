@@ -1,0 +1,78 @@
+***** Functions 1st four links are already there in package-1 folder numbered as(4/17, 5/17, 6/17,7/17) check it out.*******
+
+*** THIS FILE IS FROM VARIADIC TEXT TILL RECURSION***
+
+1)Variadic Functions: taken from gfg:
+    a) allow you to pass a variable no of arguements to a function.
+    b) above feature is useful when udk the no of args to pass to func
+    c) variadic function accepts multiple arguments of the "same type" and can be called with "any number of arguments", including none.
+
+Ex: variadic function to calculate sum:
+package main
+import "fmt"
+
+// Variadic function to calculate sum
+func sum(nums ...int) int {
+    total := 0
+    for _, n := range nums {
+        total += n
+    }
+    return total
+}
+
+func main() {
+    fmt.Println("Sum of 1, 2, 3:", sum(1, 2, 3))
+    fmt.Println("Sum of 4, 5:", sum(4, 5))
+    fmt.Println("Sum of no numbers:", sum())
+}
+output: 6
+9
+0
+-------------------------------------------------------------------------------------------------------------------------------------------
+2)Closures: taken from gfg
+Go lang provides a special "anonymous function" which can form a closure.
+***** Closure is a special type of anonymous function that references variables declared outside of the function itself.***** 
+It is similar to accessing global variables which are available before the declaration of the function.
+Ex:
+// Golang program to illustrate how 
+// to create a Closure 
+package main 
+
+import "fmt"
+
+func main() { 
+	
+	// Declaring the variable 
+	GFG := 0 
+
+	// Assigning an anonymous 
+	// function to a variable 
+	counter := func() int { 
+	GFG += 1 
+	return GFG 
+	} 
+
+	fmt.Println(counter()) 
+	fmt.Println(counter()) 	
+} 
+output:
+1
+2
+
+Basically, your not passing GFG as a parameter to the anonymous function, but the function has access to it. 
+
+NOTE: Closure function also provides "data isolation" - simply remember this.
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+3) Recursion: From gfg
+concept where a function calls itself directly or indirectly , where each call converges to some point.
+Every recursive func has base case.
+
+TYPES:
+    a)Direct: where the function calls itself directly.
+    b)Indirect: The type of recursion where the function calls another function and this function, in turn, calls the calling function
+     is called an indirect recursion.
+    c)Tail Recursion
+    d)Head recursion
+    e) Infinite recursion
+    f) Anonymous function recursion

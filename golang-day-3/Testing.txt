@@ -1,0 +1,87 @@
+USER -Testing 2 links also.
+
+1) Unit Testing: 
+- Imp part of writing Go programmes.
+- is source code file name = utils.go , then its test file named- utils-test.go
+-A test is created by writing a function with a name beginning with Test. Ex: func TestIntMinBasic()
+
+- t.Error* will report test failures but continue executing the test.
+- t.Fatal* will report test failures and stop the test immediately.
+
+-Writing test can be repetetive, hence its natural to use table-driven-style, where inputs and expected outputs are listed in a table.
+- A single loop walks over them and performs the test logic.
+
+Ex:
+func TestIntMinTableDriven(t *testing.T) {
+    var tests = []struct {
+        a, b int
+        want int
+    }{
+        {0, 1, 0},
+        {1, 0, 0},
+        {2, -2, -2},
+        {0, -1, -1},
+        {-1, 0, -1},
+    }
+}
+
+-Run all tests in the current project in verbose mode. - it is a setting/feature that provides detailed output or information.
+
+
+
+
+2) 5 advanced testing techniques in GO: ( better put in gpt the entire para to understand.)
+
+a)use test suites:
+suite testing is the process of developing a test against a common interface which can be used against multiple implementations 
+of that interface.
+
+-Using this strategy will save lots of time.
+
+b) Avoid interface pollution:
+-Interfaces are the most important tool in testing.
+-THese are usually exported for a) consumers implementating their own mock
+                                b) package exporting their own mock
+
+
+-nterfaces should be carefully considered before exporting them. Best thing is to document what interfaces your struct satisfy.
+
+c)Dont export concurrency primitives:
+-Problem: In Go, channels and sync primitives (like sync.Mutex) are easy to use but can be overused.
+-Why Not Export?: If you export a channel or a Mutex, you're exposing your consumers to unnecessary complexity.
+
+-When channels are exposed, testing becomes harder as they must:
+    -handle errors, understand regarding channels n more,
+
+-Alternative: Better way is to keep concurrency logic private and let consuemers deal with it if needed.
+- If u need to export a channel, make it either read only  or write only
+
+-BEst thing is to mention in your document if a struct is safe for concurrency or no.
+
+d) Use net/http/httptest for http testing:
+-Problem: writing tests for HTTP handlers by spinning up real servers or bindings to ports can be slow and resource-consuming.
+-Solution: 
+use httptest to test Http handlers without starting a real server.  -->this speeds up tests, allows test to run in parallel, simplifies process.
+
+e) USe a separate _test package:
+- see document only.
+- Example: If a package net/url wants to test how it works with net/http, it uses net/url_test to avoid breaking cyclic dependencies.
+
+f) Expose unexported variables for testing:
+-Prob: If you want to test private  or un exported variables , the're  not accessible directly.
+
+-Solutin: in the test file _test.go, you can expose private variables for testing time-related logic.
+
+g)Critical analysis:
+There are no one - size fits for all, you should analyze situation - context is imp.
+
+
+SUMMARy:
+minimize exposing concurrency logic.
+use httptest for faster HTTP tests.
+separate test packages to avoid cyclic dependencies, and expose only necessary data during testing while ensuring that you
+     critically evaluate your choices.
+
+
+
+

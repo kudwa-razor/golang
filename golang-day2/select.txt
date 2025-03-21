@@ -1,0 +1,7 @@
+Go's SELECT lets you wait on multiple channels ops.
+
+-Combi of "goroutines" and "channels" with "select" is powerful feature. 
+
+-It feels like switch statement but with with channels and goroutines.
+
+see the document only better.

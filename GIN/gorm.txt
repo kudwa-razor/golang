@@ -1,0 +1,18 @@
+// take from the GORM link given.
+
+-GORM is a code first ORM library for Go lang allows to create as well as interact with database schema.
+-gorm.model (1:35 - )  -any key called ID - will be considered primary key.
+
+-Auto migration tool:  automatically migrates your schema, to keep your schema update to date.
+ - The above tool will only create tables, missing columns and missing indexes, it wont change existing column's type or delete unused 
+    columns to protect your data.
+
+ -GORM makes heavy use of method-chaining.
+
+ -Error handling with GORM (21:25 - 22:24):
+
+ - Soft delete (15:27 - ) -> If a model has DeletedAt field, it will get a soft delete. So, when calling Delete, the record will not be 
+    permanently removed from the database, rather the DeletedAt's value will be set to the current time.
+
+ - (19:00 - 22) -> certain key words.
+.

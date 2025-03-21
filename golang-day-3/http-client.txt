@@ -1,0 +1,38 @@
+Contains both HTTP-CLIENT, HTTP-SERVER, CONTEXT. --> These 3 are veryyy important... Especially gpt the context code and server code.
+
+1) Http Clients: ->Call an http end point in golang
+- net/http package gives excellent support for http clients/servers.
+- http.Get is a convenient shortcut around creating an http.Client object and calling its get method.
+
+- resp.Status - prints the http response status.
+
+- printting first 5 lines of response body . - refer code http-client.go
+
+
+2) Http-Server: -> creating an http endpoint in golang.
+-uses same net/http package to write basic erver.
+- common concept is *** handlers ***.
+- Handler is an object implementating http.Handler interface.
+- handler is commonly written using http.HandlerFunc.
+
+
+- ****** IMP *****
+function serving as Handler take http.ResponseWriter and http.Request as arguements -> response writer is used to fill in the http response.
+In the http-server.go code, ull see that the simple response is "hello"
+
+- http.HandlerFunc sets up default router in net/http package.
+
+-Finally we call the  Listen and Serve with the port and a handler. -> Nil tells it to use the default router that we set up.
+Refer code http-server.go.
+
+Look at the code running and do gpt, its reallyyy important.
+
+3) Context:
+-I.G it is basically used for controlling cancellation.
+-A Context carries deadlines, cancellation signals, and other request-scoped values across API boundaries and goroutines.
+
+-keep an eye on the context’s Done() channel for a signal that we should cancel the work and return as soon as possible.
+
+The context’s Err() method returns an error that explains why the Done() channel was closed.
+
+-See context.go code once. 

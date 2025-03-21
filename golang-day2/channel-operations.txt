@@ -1,0 +1,24 @@
+CHANNELS - contains non-blocking, closing , range-over-channels.
+
+1) Non blocking channel: 
+-basic send and receive on channels are blocking. - ** do gpt or google idk how it is blocking.
+- we can use select with a default clause to implement non-blocking send, receives,multi-way selects.
+
+- We can implement non-blocking send, receive,multi-way using SELECT.
+Each of this type is very clearly mentioned in the code in document as well as I have tried coding it and very clearly commented it out.
+
+2) Closing channels:
+- this channel indicates that no more value will be sent on it.
+- useful to communicate completion to the channel's Receiver.
+- In this example we’ll use a jobs channel to communicate work to be done from the main() goroutine to a worker goroutine. 
+  When we have no more jobs for the worker we’ll close the jobs channel.
+
+See document
+
+3) Range over channels:
+- here both "for" and "range" is used to iterate over values received from a channel.
+-Very nice example of queue: please see range-over-ch.go code.
+- The above code example also showed that it’s possible to close a non-empty channel but still have the remaining values be received.
+
+
+

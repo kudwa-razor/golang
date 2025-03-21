@@ -1,0 +1,255 @@
+1st part of kuberenetes was literally copy pasted into gpt  to summarize for important points.
+
+-Kubernetes Components:
+    1)Control Plane
+    2)Worker node
+
+1) Control Plane Components: 
+  -kube-apiserver
+  -kube-controller-manager
+  -Kube-scheduler
+  -ETCD
+  
+  -These components will be managed by aws EKS offering.
+
+2) Worker node components:
+  -Kubelet
+  -Kube-proxy
+  -Container runtime
+
+  -These components are grouped by ASG's based  on requirements and utilization.
+
+
+-Kubernetes Resources:
+        -A Pod is the basic execution unit of a Kubernetes application–the smallest and simplest unit in the Kubernetes object model 
+        that you create or deploy. A Pod represents processes running on your cluster.
+
+        -Basically it is an instance of an application in Kubernetes which can contain a single container or a small no of containers that 
+        are tightly coupled and share Resources.
+
+
+-Replica sets:
+ -Ensures a specified number of identical Pods are running at all times.
+  -Uses a Pod template to define identical Pods.
+  -Command: kubectl get rs -n
+
+-Deployment:
+    -Manages ReplicaSets and provides declarative updates to Pods.
+    -Recommended over ReplicaSets for easier updates, rollbacks, and scaling.
+    -Command: kubectl get deployments -n
+
+-StatefulSet:
+    -Like a Deployment, but maintains a stable identity for each Pod.
+    -Used when Pods need:
+        Unique, stable network identifiers
+        Persistent storage
+        Ordered deployment & scaling
+    -Command: kubectl get statefulsets -n
+
+-DaemonSet:
+    -Ensures a copy of a Pod runs on every Node (or selected Nodes).
+    -Used for:
+        Cluster storage daemons
+        Log collection daemons
+        Monitoring agents
+        Command: kubectl get daemonsets -n
+
+-Job:
+    -Runs a task to completion (i.e., once or multiple successful times).
+    -Once the specified number of completions is reached, the Job is complete.
+    -Command: kubectl get jobs -n
+
+-CronJob:
+    -Schedules Jobs at periodic intervals using a cron-like syntax.
+    -Useful for:
+        Backups
+        Email notifications
+        Scheduled maintenance tasks
+    -Command: kubectl get cronjobs -n
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+NETWORKING AND EXPOSURE:
+-Service:
+    -Exposes Pods as a network service.
+    -Provides load balancing and service discovery across Pods.
+    -Command: kubectl get svc -n
+
+-Ingress:
+    -Routes external HTTP/HTTPS traffic to internal Services.
+    -Supports:
+        -Externally reachable URLs
+        -SSL/TLS termination
+        -Load balancing
+        -Name-based virtual hosting
+    -Command: kubectl get ingress -n
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Storage Management:
+-Persistent Volume (PV):
+    -Cluster-wide storage resource provisioned manually or dynamically.
+    -Defines:
+        -Storage source (Cloud, NFS, etc.)
+        -Capacity
+        -Access mode
+        -Reclaim policy
+    -Command: kubectl get pv
+
+-Persistent Volume Claim (PVC):
+    -Requests storage from a Persistent Volume.
+    -Used by Pods to consume persistent storage.
+    -Command: kubectl get pvc
+
+StorageClass
+    -Defines different types of storage for dynamic provisioning.
+    -Used to classify storage by:
+        -Performance levels
+        -Backup policies
+        -Other administrator-defined policies
+    -Command: kubectl get storageclass
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Configuration & Secrets Management:
+-ConfigMap:
+    -Stores non-confidential configuration data as key-value pairs.
+    -Used to decouple environment-specific settings from applications.
+    -Command: kubectl get cm -n
+
+-Secret:
+    -Stores sensitive data like passwords, OAuth tokens, and API keys.
+    -Can be used:
+        -As files in a volume
+        -As environment variables
+        -For image pulling authentication
+    -Command: kubectl get secrets -n
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Resource Management:
+-Resource Quota:
+    -Limits total resource consumption per namespace.
+    -Controls:
+        -CPU & Memory usage
+        -Number of Pods, Services, and other objects
+    -Command: kubectl get quota -n
+
+-Requests & Limits: 
+    -Defines how much CPU & Memory a Pod can use.
+    -Requests:
+        -Minimum guaranteed resource for scheduling.
+    -Limits:
+        -Maximum allowed usage before Kubernetes terminates the Pod.
+    -Units:
+        -CPU: 1 CPU = 1 vCPU (cloud) or 1 hyperthread (bare metal).
+        -Memory: Measured in bytes (e.g., Mi, Gi, Ti).
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Pod Scheduling & Placement:
+-Node Selector:
+    -Restricts a Pod to run on specific Nodes using key-value labels.
+    -Commonly used for:
+        -Node availability zones
+        -Resource constraints
+        -Special hardware requirements
+
+-Taints & Tolerations:
+    -Taints: Applied to Nodes to repel certain Pods.
+    -Tolerations: Applied to Pods to allow scheduling on tainted Nodes.
+    -Used to:
+        -Isolate workloads
+        -Prevent overloading certain Nodes
+
+-Node Affinity & Pod Anti-Affinity:
+    -Node Affinity: Like nodeSelector, but with more flexible scheduling rules.
+    -Pod Anti-Affinity: Prevents similar Pods from being scheduled together on the same Node.
+    -Helps in:
+        -Distributing workloads evenly
+        -Preventing resource contention
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---> Working with kubernetes slides -> 2nd link for KT of kubernetes -> contains 38 slides.
+
+slide no:
+5: transition from  physical machine to virtual machine :
+    - shown that in physical machine: 1 server can host 1 app , whereas in virtual machine: 1 server can host multiple apps i.e 
+    hypervisor in on server & that hypervisor is hosting 2 apps on 2 different OS.
+
+6: transition from virtual machine to container:
+    - container is divided as:
+        - 1 container engine(docker) hosted on server1 or VM 1.
+        - and this container engine hosts 2 containers( container 1 and container 2 ) which have one app each in them.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+there is literally nothing in the slides, so im shifting to the video to understand some explanation atleast: Video link below:
+
+"https://drive.google.com/file/d/1AbDwU8KdhfBM5Fiia8MN7Z6ItK7n3bxJ/view"
+
+Dockers: Are simply the implementation of a container.
+Container can be considered as a lightweight VM as there is no setting up of OS.
+
+Why container? 
+    - Can easily pack application and all of its dependencies.
+    - Can create reproducable builds meaning can work on any local system
+    -portability, isolation ig.
+
+Container Orchestration: Basically we have to simply create an application based on containers and K8s manages it automatically.
+
+Biggest takeaway is , you dont need to understand 'how' k8 does all of this management. Instead understand its working simply.
+
+Thought process: 
+ - If I want to do 'x' , what object to use and how do i configure it?
+ 
+Pod definitinon: basic/smallest deployable unit - it can be a collection of containers.
+
+Container vs pod 7:53 
+
+So here we refer server/virtual machine as 'NODE':
+ - context of container is restricted to the machine(node) only.
+ -context of pod is spread accross all machine.
+
+Multi-container POD is called a sidecar-pattern , but if there are multiple - containers in a POD , it need not always be side-car pattern:
+    -> using multiple container, you can run seperate container to complement or help you app present in another container.
+
+Two containers running on the same node/ host node will be able to talk to each other using bridge interface.
+" " " " " " " " " " " " " different nodes(diff netwrok too) are able to talk to each other using overlay network - connecting accross nodes.
+
+Kubernetes exploits this approach -> creates a network between all the pods running on all the nodes.
+
+
+'kubectl' is utility that interact with k8s REST API  server.
+
+kubectl delete pod app1 -> deletes pod app1
+kubectl get pods -> shows all the available pods.
+
+Command to check deployement is running or no:
+kubectl get 'kind' -> kind is different for each deployement im guessing , so in the utube video it is:
+kubectl get deployments 
+
+get deployements -w   -> allows u to watch the deployements, updates( deleting, inserting).
+
+You can also set the no of replicas you want to create of each pod -> why this is done idk prperly.
+
+But if you choose to delete any of the replicas/ pods and run it again, you will see that another pod will be set up in its place 
+and do its work (main feature of k8s).
+
+kubectl get pods -o wide : gives more info about every pod like IP and more.
+
+-Now imagine there are 3 replicas of app1 and there is another app2. Now how will app2 know which version of app1 to interact with? 
+    - ex: app1(original)
+          app1-4xbr(replica 1)
+          app1- 7bhg( replica 2)
+          app1 -5gajx(replica 3)
+          app2 
+
+    soln: There is an object called service.yaml where there is a 'selector' which selects which app to interact:
+        ex: selector:
+              name:app1 
+
+
+Whenever your calling kubectl command, it is interacting with the API server.
+
+
+

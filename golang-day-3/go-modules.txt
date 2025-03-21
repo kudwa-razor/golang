@@ -1,0 +1,30 @@
+1) Go-Modules: 
+Refer chatgpt link: "https://chatgpt.com/share/67c5bbea-b9f8-800d-8e9e-82e1cd5a6cc4" 
+Refer to the end of the chat.
+
+-These are go's official way to manage dependencies.
+- It is a collection of packages with go.mod as its root file.
+-Every module has a module path  that is used for importing it in other projects.
+
+
+go.mod and go.sum:
+go.mod: Lists the module name and dependencies with their versions.
+
+so.sum: Contains cryptographic checksums to ensure dependencies do not change unexpectedly. - Used for security and consistency.
+
+Listing dependencies:
+go list -m all ----> shows direct and indirect dependencies.
+
+-Major version changes are managed using semantic import versioning. - makes the module semantically compatible accross all of its version.
+
+- removing unnecessary dependencies from go.mod:
+go mod tidy --> cleans up go.mod and go,sum by removing unused modules.
+
+
+9. Key Commands for Go Modules
+Command                                         Purpose
+go mod init <module-name>                       Initializes a new Go module
+go build, go test                               Automatically adds dependencies
+go list -m all                                  Lists all dependencies
+go get ‹module>                                 Adds or upgrades a dependency
+go mod tidy                                     Cleans up unused dependencies

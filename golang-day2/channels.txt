@@ -1,0 +1,13 @@
+
+Channels: 
+- Pipe that connect Concurrent go routines.
+-You can send values into channels from one goroutine and receive those values into another goroutine.
+
+-Create a new channel with "make(chan val-type)". Channels are typed by the values they convey.
+
+-Send a value into a channel using the channel <- syntax.
+
+- <-channel syntax receives a value from the channel.which is printed out in the eg.
+
+see the document link for the same.
+

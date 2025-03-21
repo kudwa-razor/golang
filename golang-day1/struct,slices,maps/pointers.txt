@@ -1,0 +1,79 @@
+***** Starts from pointers and ends at STRUCT *****
+
+1) Pointer: ***IMP, the documentation given is very clear***
+ -Stores a memory address. 
+ -It references a location in memory.
+ -And obtaining its value is known as " dereferencing" a Pointer.
+
+see the pointers.go code for exact comparison between the two.
+
+2)Arrays: 
+ -sequence of elements of specific length.
+ -Multiple ways to assign array, see code arrays.go
+
+3)Slices: important data type in go giving more powerful interface to sequences than arrays.
+- refer to documentation only. Coding it taking too much time.
+Better than arrays as:
+ -
+
+4)Maps: assosciate-data type (called hashes or dicts too). 
+Ex:
+func main() {
+    m := make(map[string]int)
+    m["k1"] = 7
+    m["k2"] = 13
+    fmt.Println("map:", m)
+}
+output:
+map: map[k1:7 k2:13]
+
+In this see the optional second return value. -- IMP to differentiate between missing keys and keys with zero values like 0 or "".
+Exist in form map[k:v, k:v]
+
+5)Range- Ways to apply range to different data structures weve seen till now.
+ - sum the numbers in a slice or array (with/without index)
+ - range can iterate on map(both key-value pairs / only key of map)
+
+ -range on strings and runes ** Doubt, do gpt.**
+
+6) Structs: - similar to C struct in syntax.
+Go’s structs are typed collections of fields. They’re useful for grouping data together to form records.
+Ex:
+type person struct {
+    name string
+    age  int
+}
+- In the documentation, the newPerson part of code went above head. **
+- Access struct fields with a dot. ex: fmt.Println(s.name)
+- structs are mutable(can be changed ig).
+-If a struct type is only used for a single value, we don’t have to give it a name. The value can have an anonymous struct type. 
+This technique is commonly used for "table-driven tests."
+
+
+NOTE: Pointers to struct:
+ -Struct fields can be accessed through a struct pointer.
+ - he language permits us instead to write just p.X, without the explicit dereference.(see the line 13 of code struct-pointers.go).
+
+NOTE: Struct Literals: A struct literal means you create a new struct and directly assign values to its fields in one step.
+
+ -Ex:
+ type Person struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    // Struct literal to create a new Person
+    p := Person{
+        Name: "John",
+        Age:  30,
+    }
+    fmt.Println(p)
+}
+
+Explanation:
+Person{ Name: "John", Age: 30 } is a struct literal.
+It creates a new Person struct and immediately sets the values of its Name field to "John" and the Age field to 30.
+
+See the documentation code. Similar to above but a little different.
+

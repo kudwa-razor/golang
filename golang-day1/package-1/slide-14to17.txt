@@ -1,0 +1,33 @@
+From slide 14/17 , I have only written important slide nos. to look @ and dont code everything.
+
+1)14/17
+When the right hand side of the declaration is typed, the new variable is of that same type:
+
+var i int
+j := i // j is an int 
+
+2)15/17
+Constants are declared like variables, but with the const keyword.
+ex: inside the main:
+
+const Pi = 3.14
+func main() {
+	const World = "世界"
+	fmt.Println("Hello", World)
+	fmt.Println("Happy", Pi, "Day")
+
+	const Lie = "YES!"
+	fmt.Println("Are you gay?", Lie)
+} 
+
+the above gives output:
+Hello 世界
+Happy 3.14 Day
+Are you gay? YES!
+
+3)16/17
+High precision values, large no of decimal points ... should gpt a bit. ** 
+there are doubts. Code not very clear.
+
+
+After this it is directly For loop slides.

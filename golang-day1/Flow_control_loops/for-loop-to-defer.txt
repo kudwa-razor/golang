@@ -1,0 +1,155 @@
+In flow control statements ---- FROM " FOR LOOP" TILL "DEFER STATEMENT"
+
+Content of every page is displayed as sl.no, i.e page 1 = 1).
+
+1) FOR loop; same as python, but they are put in flower brackets. 
+Ex: 
+for i := 0; i < 10; i++ {
+		sum += i
+	}
+
+for loop made of 3: a)init b)condition c)post. 
+
+2) The  init and post are not mandatory.
+Ex:
+for ; sum < 1000; {
+		sum += sum
+	}
+
+3) Go doesnt have a while loop, instead it is for loop itself, i.e  the syntax is same as pythons while loop, but instead of "while" keyword
+ "for" is used.
+Ex:
+for sum < 1000 {
+		sum += sum
+	}
+
+4)If you omit the loop condition it loops forever, so an infinite loop is compactly expressed.
+So, if an infinite loop is run, it gives an error saying: "timeout running programme".
+
+5) If loop: same as the for loop, where no () is used but {} is used.
+Ex:
+if x < 0 {
+		return sqrt(-x) + "i"
+	}
+
+6)if with short statement: Basically states that if loop can start with short statement to execute before the condition. should google the use.
+Ex:
+func pow(x, n, lim float64) float64 {
+	if v := math.Pow(x, n); v < lim {
+		return v
+	}
+	return lim
+}
+NOTE: Variables declared in the " if " are only in scope until the end of the if. 
+i.e in the above code if we type "return v" instead of "return lim", It gives an "undefined" warning.
+
+7) Variables declared inside an if short statement are also available inside any of the else blocks.Clear example given below.
+Ex:
+func pow(x, n, lim float64) float64 {
+	if v := math.Pow(x, n); v < lim {
+		return v
+	} else {
+		fmt.Printf("%g >= %g\n", v, lim)
+	}
+	// can't use v here, though
+	return lim
+}
+
+8) GPT and understand this question once. ***
+
+9)Switch statement:
+Same as that of C,C++ except:
+    a)GO only runs the selected case, and not all the cases that follow.
+    b)break statement reqd in all other languages is automatically provided in go.
+    c)GO's swithc cases need not be constants and values invlolved need not be integers.
+Ex: ** (take a look at easier exampl or gpt explain)
+func main() {
+	fmt.Print("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// freebsd, openbsd,
+		// plan9, windows...
+		fmt.Printf("%s.\n", os)
+	}
+}
+
+10)Switch cases evaluate cases from top to bottom, stopping when a case succeeds.
+see switch-eval.go for code. 
+Note: Time in the Go playground always appears to start at 2009-11-10 23:00:00 UTC, as This makes it easier to cache
+programs by giving them deterministic output. 
+** google or gpt the NOTE part 
+
+11) Switch with no condition: same as 'switch true'. --> for clear difference, compare codes of switch-eval.go and switch-no-cond.go
+- cleaner way to write longg if-else chains.
+This below code is saved as switch-no-cond.go to see the output.
+Ex:
+package main
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	t := time.Now()
+	switch {
+	case t.Hour() < 12:
+		fmt.Println("Good morning!")
+	case t.Hour() < 17:
+		fmt.Println("Good afternoon.")
+	default:
+		fmt.Println("Good evening.")
+	}
+}
+
+12)Defer keyword: Defer is a keyword that delays the execution of a function until the surrounding function end. Used for performing cleanup
+tasks such as closing file or unlocking mutexes.
+
+Ex:
+package main
+
+import "fmt"
+
+func main() {
+	defer fmt.Println("world")
+
+	fmt.Println("hello")
+}
+gives output:
+hello
+world
+
+13) Stacking defers: If defer keyword is used in a for loop or a function, the defer function is added to a stack and it then executes 
+in a LIFO fashion.
+
+Ex: 
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
+
+output:
+counting
+done
+9
+8
+7
+.
+.
+0
+
+
+
+

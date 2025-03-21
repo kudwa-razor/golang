@@ -1,0 +1,317 @@
+Gin : Updated link.
+-gin.Default means we will create a gin router with default middleware that is for logger and recovery.
+
+Video 1 is completely there in the code main-1.go
+--------------------------------------------------------------------------------------------------------------------------------------------
+Video 2: each code is named 2.1 , 2.2, 2.3
+
+1)Custom Http configuration with gin
+2)Route grouping in Gin
+3) Using basic auth functionality with gin
+
+1)- the router.Run(":9090) is the same as writing  http.ListenAndServe(":9090", router) . The only difference bein we are specifying explicitly in the latter.
+- Always remember to put : before 9090 . Without : , the terminal will give each and every info abt server but itll simply exit doing nothing.
+
+-We can use golang http package  along with the server struct to create a 'server' instance that will have info abt the properties 
+that we want to pass to the server. 
+
+- see the code in main-2.go . same as main-1.go but with difference.
+
+2)- Sometimes a need may come that - with the same API we are writing different endpoints.
+- Certain endpoints are for admins and certain endpoints are for client (to serve data to client ).
+- We can easily do route grouping: 
+            a) putting getData into the admin group
+            b) putting getQueryString into client group
+
+            c) now when you run it in terminal, you can see that  getQueryString is in client and getData is in admin path.
+
+- Useful when you want to serve multiple clients with same endpoint or same set of endpoints.
+
+
+3) Auth mechanism:
+- Imagine there is a requirement in the admin group of point 2)  should be authenticated. 
+- Simple authentication for API provided by go 
+- for adding that authentication mechanism:
+    -Application of BasicAuth mechanism on Account meaning; a user should pass a username and password.
+    - Else, the user will not be able to authenticate with the API and not get output.
+
+- Now to use this to authentication to admin; we should pass the auth group into admin group while defining.
+Ex:
+admin := router.Group("/admin", auth){
+    //body of func.
+}
+
+See code.
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Video 3: (all the 1,2,3,4 is simply jumbled and given in the video, once I code ill write what to refer when.)
+1) What is middleware ( in the request pipeline)
+2) HOw to use middleware in go
+3) Different ways to write middleware in go and why?
+4)Apply middleware to routes, route groups and whole Application at once.
+
+1) -In the request pipeline , a middleware are functions that have access to request objects as well as the response objects and
+    the next function in the application in request-response cycle.
+
+  request -> port(8080) -> connection handler -> app(code) -> main(entry point) -> request middleware -> code logic -> response middleware
+                                                                                                                                |
+                                                                                                                                |
+                                                                                                                                |
+                                                                                                     response  <- port(8081)____|
+                                                                                                    
+
+
+ - code refer utube video @ 3 minutes - 7:11 (run it once)
+ - There are 2 types of syntaxes for middleware:
+       a) 3:45 - 5:33: - doing if condition to check if there is a 'header' called token and the value of that header is present(== 'auth'),
+        then c.Next() i.e pass it to next pipeline. --> The header, token and its value == auth can be seen in POSTMAN.
+
+        - BUt if it does not satisfy , return response as JSON with status code: 500  and message.
+
+- Multiple ways to use middleware:
+    a) Using it at an app- level: meaning when its used @ app-level it will be applied to all the route.
+        router.Use(middleware.Authenticate)
+
+    b) Apply middleware to specific route: Pass the middleware.Authenticate as a param to router.GET("/getData) , so itll only apply to 
+    /getData route.
+
+    c) Apply middleware into group: 9:41 - 11:55
+        -creating group called admin.
+        - putting getData and getData1 into the group.
+        - Similar to b) it should be applied to signature of admin group
+    ex:  admin := router.Group("/admin", middleware.Authenticate){
+            //getData
+            //getData1
+        }
+    
+
+----------- So THE above a), b), c) is first way to write middleware (starts from line 65) ---------------------------
+
+       b) 2nd wat to write middleware: 12-26 - 14:40 
+        - THis is doing exactly the same thing that line 65 waala code was doing but, the extra thing we get of writing request middleware
+        in this way is:
+            - Basically extra thing we adding is gin.HandlerFunc.
+
+            - extra room to write custom logic before middleware is executed. It can be a piece of code for anything like checking if we 
+            should go forward with processing request or no.
+
+            
+
+(15:04 - 17:56) for below.
+*** Lets write a middleware that will be executed after the code logic has been executed and before serving the response.
+ - adding a header info - key, value.
+ - adding middleware.authenticate  as param to the getData. 
+ - Whenever a request to getData will come , 1st- request will be set for token and once it has executed, then addHeader has to br running 
+  & add value of key - value in header response & finally response should be served.
+
+- also add middleware.AddHeader as a param to getData along with middleware.authenticate. 
+
+remember middleware.AddHeader is for request and middleware.Authenticate is for response.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+VIDEO 4: 
+1) Logging in Gin
+2) How default loggin works in Gin
+3) Define format for(this is of ig) the log routes in GIN 
+4) Define format of the logs with GIN 
+5) Write logs to file in GIN 
+6) Conotrolling Log output coloring in console with GIN
+7) Logging in JSON format in GIN( Real work situation)
+
+2) Default logging is told first and then 
+ Default logging: from (1:00 - 2:00)
+
+1)Logging6:(2:00- 6:01), it also contains 5) 
+syntax: router := gin.Default() -> when run gives the status code, time taken, method, route , logger .
+
+--- Now what if i want to write this information to a file ----
+ - barely 2 lines of code, but shld import library such as os and io 
+ - create a file using os.Create("ginLogging.log")   syntax --> f, _ =os.Create("ginLogging.log")
+  - gin.DefaultWriter = io.MultiWriter(f) -> it says, whatever is logged by the gin default router( above syntax), I can apply it to a
+   file.
+
+   -Now as soon as we run it, file gets created named ginLogging.log having all of the logs in it rather than in the console as earlier.
+
+
+--- Now i want to log the output to the file as well as console.
+    change in above syntax: gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+
+3) 6:21 - 8:40
+ - DebugPrintRouteFunc - we are passing info to the function in a specific formatted way & in the same format it will print the output 
+ into the standard output.
+ - Basically change the route  displayed in the console as per format given by me.
+ For ex: 
+ By default the path is:  method/route/handler/count_of_handler -> GET /getData  main.getData (3 handlers)
+ In code he has changes to :  route/method/handler/count_of_handler -> /getData GET  main.getData 3
+
+4) 8:45 - 12:53
+- created a middleware with name of logger.go under the new package 'logger'
+- already copied a function named FormatLogs and its returning formatted string .
+- We are just formating each and every object of param/LogFormatterParams (1 of the 2) and passing it on to gin default logger so it can 
+ print to standard output or file or to both.
+ 
+ - in main , we're trying to use:
+ router := gin.New()
+
+ and below type:
+ router.Use(gin.LoggerWithFormatter(logger.FormatLogs))
+
+
+** Now, what will happen is, gin will start logging my output in the format of what is defined in FormatLogs - in middleware logger.go.
+
+- So this will happen for each and every route as it is defined for application level.
+
+6) 13:00 - 16:27
+
+- Here, you can use gin.ForceConsoleColor() - gin will force the logger to have color encoding.
+- *** This coloring does not work with all OS.
+- to enforce it , do the foll:
+    -import  "github.com/mattn/go-colorable
+    -below the ForceConsoleColor code , type :
+        gin.DefaultWriter = colorable.NewColorableStdout()
+
+    - for the import statement  above to work,  again shld type 'go mod tidy' and in console logger we can see color formating.
+
+- To disable color fomrating:
+gin.DisableConsoleColor()
+
+
+7)16:30 - 19:23
+-Making use of existing logger package(new file created in 4)
+- Write another middleware , called logFormatLocal which is a struct type.  It has certain info such as TimeStamp, StatusCodex ... so on
+-Marshalling struct to JSON object and finally returning the JSON object.
+
+-Now, should use all of this in main.go as logger.FormatLogsJson
+
+
+Basically it gives the hit API logs in JSON format , and giving u all the JSOn formatlogging as per as your customized way.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Video5: 
+1) What is logrus?
+2) Installing and using logrus
+3) LogLevels in logrus
+4) Log messages to multiple options
+5) Format messages in logrus
+6) Logging in JSON format
+7)LogWithField and LogWithFields in logrus.
+
+2) install and use logrus: (1:00 -3:40 )
+
+-import logrus package and install it using go get command or go mod tidy.
+-to use it: 
+logrus.Println("Hi i am logrus") 
+- Now if you run it; it will print time, level along with message.
+ 
+ 3) Loglevel :(4:00 min - 9:03)
+- It is a way of determining the seniority or priority of any type of action.  
+
+- Provides diff levels like  trace,debug, info,warn,error, fatal, panic.(in sequence).
+- Now what I can do is , attach a log level to each of the log application.
+-Ex: global log level is warn, then application will print error, fatal, panic that is below it in sequence. *****IMPPPP.
+
+Trace -> logrus.Traceln("Trace") -> basically means printing trace and the level for the trace is "trace" because of Traceln.
+
+4) shaayad ( 9:03 - 11:50 )
+// how to print and logg messages for logger 
+// Using logrus we can print messages to : console, log file. 
+logrus.SetOutput(os.Stdout) -> meaning, we are telling logrus to write message to the standard output.
+
+//Write messages to a file:(10:00 - )
+ends up creating a file named logrus.log and printing all of the messages from index file.
+// BUt this only prints in the file and not in the default  console logger.
+
+
+
+// BUt to print in the file as well as in default console logger
+make use of io.MultiWriter :
+    multi := io.MultiWriter(f, os.Stdout)
+    logrus.SetOutput(multi)
+
+logrus.SetReportCaller(true) -> do gpt , basically prints extra info 
+
+5) (14:30 -  18:30) 
+-Formatting existing log by adding date and time to the output.
+-logrus.SetFormatter(&logrus.TextFormatter) // threfore , the TextFormatter gives a lotttt of options to choose from.
+
+6) Json thing comes in the video itself.
+
+//Certain methods by-default provided by loggers.
+(18:38 - end)
+7)
+ WIthField is a default method:
+-WIthField - info 
+-WIthField - Debug
+
+- WIthField we can add single field, WithFields - we can add multiple fields.
+ 
+- One of the most unorganized videos this one. 
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Video 6:
+1) How to implement logrus in a real world GIN application.
+- consists different packages:
+   a) API : consists of controller and model:
+      -contoller - handlers which will be executed based on the route.
+      -model - has model/data assosciated to the controller.
+   
+   b) Config: relates to the configuration that the API will be having.
+
+   c)logger: package that deals with the logging.
+
+   d) middleware: is the response and request middleware -> deals with request and response logging.
+
+   e)Router : has all info abt router - where it is initiated, binding is done.
+
+   f)main.go - where main code body lies.
+
+   other 2 file sinclude go.mod and go.sum
+
+- Main implementation: (1:39 - )
+  -viper: 3rd party binary of golang that helps you read different format files & have them in a form of dictionary in your golang object.
+  - Its an excellent framework and can read files like .yaml, .json, .sml and so on.
+
+-Regarding config.go -from 1:39 - 4:20
+-logger.go (5:00-13:10)
+-router.go (13:20 - 13:55) and again from (14:31-14:40) -> this part contains regarding controller.go of api package.
+    -controller.go as well as model.go (14:40-15:53)
+-middleware.go - (13:56-14:30)
+running the programm @ 15:27 till end 
+
+------- please try running this code locally -----------------
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+Video 7:
+1)  How to implement boiler plate structure for an API in Gin in real world.
+Again like video 6, youve to create a seperate folder as there are certain packages.
+
+- created a folder called src which consists of al of the packages like api,logger,config,database,middleware,router.
+-DockerFile - if your using the conteainerized aproach to deploy application
+-go.mod & go.sum for dependency managament.
+-main.go - entry point of the programme
+-swagger.yaml - if you want to expose your API s as a swagger.
+
+    a) API- consists of controller.go and model.go ->same as video 6:
+        - but includes a pattern called MDC- model view and controller where controller is the part that will execute the logic.
+        -main.go (6:00 - 13:42) this also includes:
+                        config.go
+                        logger.go
+                        router.go
+                        middleware.go
+
+    b) After this , run the programm (13:42 - 15:05)
+    
+    c)Database:
+        inside main.go (15:13 - 17:20)
+        - not connecting to database because it will try connecting to Database while running for the first time. - which is not setup.
+    
+Please run this too _----------
+
+--------------------------------------------------------------------------------------------------------------------------------------------

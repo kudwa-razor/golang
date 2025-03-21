@@ -1,0 +1,105 @@
+This document we should read is actually page 1 to 8 for methods. But the link contains document of 26 pages, hence 1/26.
+
+Methods:
+1) 1/26
+ -A method is a function with a special receiver argument.
+ -The receiver appears in its own argument list between the func keyword and the method name.
+ -In this example, the Abs method has a receiver of type Vertex named v.
+
+Ex:
+func (v Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+see methods.go for actual example.
+
+2) 2/26
+Remember: a method is just a function with a receiver argument.
+
+3)3/26
+You can only declare a method with a receiver whose type is defined in the same package as the method. 
+You cannot declare a method with a receiver whose type is defined in another package (which includes the built-in types such as int).
+Ex:
+type MyFloat float64
+
+func (f MyFloat) Abs() float64 {
+	if f < 0 {
+		return float64(-f)
+	}
+	return float64(f)
+}
+
+func main() {
+	f := MyFloat(-math.Sqrt2)
+	fmt.Println(f.Abs())
+}
+
+4)4/26
+Pointer receiver:
+Methods with pointer receivers can modify the value to which the receiver points (as Scale does here). 
+Since methods often need to modify their receiver, pointer receivers are more common than value receivers.
+see the code named method-pointer.go to correctly understand. use gpt if needed 
+
+5/8: simply shows how 4/17 can be written as 2 seperate functions and what changes are made.
+
+5) 6/26  and 7/26(both) ************ V E R Y    I M P O R T A N T ******************
+6/8
+a)Comparing the previous two programs(4/8 and 5/8), you might notice that functions with a pointer argument must take a pointer. i.e 
+function ScaleFunc()
+WHEREAS
+b)Methods with pointer receivers take either a value or a pointer as the receiver when they are called, i.e the Scale method.
+Refer below example:
+
+package main
+import "fmt"
+
+type Vertex struct {
+	X, Y float64
+}
+
+func (v *Vertex) Scale(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func ScaleFunc(v *Vertex, f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func main() {
+	v := Vertex{3, 4}
+	v.Scale(2)
+	ScaleFunc(&v, 10)
+
+	p := &Vertex{4, 3}
+	p.Scale(3)
+	ScaleFunc(p, 8)
+
+	fmt.Println(v, p)
+}
+In the above Ex, line 70 takes the example of b)
+and line 71 takes example of a)
+
+7/26 : simply states the same thing as 6/8 but reverse.
+a)Functions that take a value argument must take a value of that specific type
+AND 
+b)while methods with value receivers take either a value or a pointer as the receiver when they are called.
+
+Simply see the 7/26 document.
+
+
+6) 8/26: Whether to choose a value or pointer receiver ?
+
+2 reasons to use pointer receiver:
+ -the method can modify the value that its receiver points to.
+ -avoid copying the value on each method call. This can be more efficient if the receiver is a large struct.
+
+NOTE: All methods on a given type should have either value or pointer receivers, BUT NOT BOTH!!! - WHY? do google or see interfaces folder.
+
+
+
+
+
+
+

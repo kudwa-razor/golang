@@ -1,0 +1,15 @@
+1) Panic:
+- typically means something went wrong.
+- We use it to fail fast on errors that shouldnt occur during normal op. or not prepared to handle it gracefully.
+
+-A common use of panic is to abort if a function returns an error value that we don’t know how to (or want to) handle.
+
+- When the panic is triggered, programme exits without reaching the rest of the code.
+
+2)Signals:
+- We want our go programme to handle UNIX signals - for ex : signals/ statement given by user thru terminal for compiling or code to run.
+- Handling signals in go with channels:
+    -create a channel to receive notifications from os, this channel should be buffered.
+    -signal.Notify registers the given channel to receive notifications of the specified signals.
+
+- example in code really good.

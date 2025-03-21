@@ -1,0 +1,84 @@
+Consists of Mocking, OVerview of mocking, Working without mocks.
+
+1) Mocking:
+-testing can be challenging when dealing with external dependencies such as databases, APIs, and other services.
+ That’s where mocking comes in.
+
+- Mocking is a technique used in unit testing for creating fake implementations and components for your code to interact with.
+-These mocks allow u to stimulate the behavior of external dependencies, making it easier to test funcationalities of the unit.
+
+2) Overview of mocking:
+
+-It's an important skill to be able to slice up requirements as small as you can so you can have working software.
+
+Task: to countdown numbers from 3 and keep 1 second time difference between each printing , and print in new line.
+Also when it reaches 0, the output should be "GO"
+ 
+Output:
+3
+2
+1
+GO
+
+
+-Solution: to divide work up and iterate on it:
+
+Print 3
+
+Print 3, 2, 1 and Go!
+
+Wait a second between each line.
+
+Steps:
+- Write the test - see the code only.
+- Try and run the test.
+- Write the minimal amt of code for the test to run and check failing test output.
+-Write enough code to make it pass - here were using fmt.Fprint - this takes an io.Writer like (*bytes.Buffer) and sends a string to it.
+-Refactor instead of *bytes.Buffer , use general purpose interface.
+
+-Yes this seems trivial but this approach is what I would recommend for any project. 
+****** Take a thin slice of functionality and make it work end-to-end, backed by tests. --->See the code countdown.go ******
+
+- Next we can make it print 2,1 and then "Go!". --->see countdown.go
+
+-Now the test in countdown.go runs but there are problems:
+ a)It is relatively slow ~ 3 secs, which ruins developer productivity.
+
+ b) We have dependency on Sleep which we need to extract. Soln:--->  If we 'mock' time.Sleep, we can use dependency injection to use it instead of
+ real time.Sleep and spy on the calls.
+
+ // This text is too much just gpt it nicely idk what else.
+
+
+
+
+
+
+3) Working without mocks:
+"https://chatgpt.com/share/67c5bbea-b9f8-800d-8e9e-82e1cd5a6cc4" - refer this link till fakes.
+
+a)Tl;DR 
+-Instead of using mocks/ stubs for testing , use fakes and integration tests for reliability.
+-Mocks/stubs can lead to brittle test that dont reflect real world behaviour.
+-Fakes are simpler represtation of real world dependencies making test more realistic.
+
+b)Primer on test doubles:
+-test doubles are objects that replace real dependencies in test and come in types:
+  - - Dummy
+  - - stub
+  - - Mock 
+  - - Spy 
+  - -Fake 
+
+c) Problem with stubs and mocks. Refer gpt.
+
+d) Troubles with mocks. - gpt
+
+e)Test Strategy - A better approach - gpt.
+ -Instead of untie tests with mocks, use integration tests, fakes.
+
+f) integration tests: instead of testing isolation function with mock, run tests using real or in-memory database.
+See gpt.
+
+g) Fakes : Better than mocks!!! gpt see- real, lightweight implementation of interface.
+    Only use mocks when necessary - EXTERNAL API ********

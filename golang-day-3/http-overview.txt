@@ -1,0 +1,15 @@
+1) Http overview 
+- Is an application level protocol for distributive, collaborative, hypermedia information systems.
+
+-Uses tcp/ip as the underlying transport protocol.
+- Uses TCP-80 port. - other can be used.
+
+-*** Http specification specifies  how clients's request data will be constructed and sent to the server , and how the server responds 
+to these requests.
+
+Features of http:
+a)Stateless: Each request is treated as a new request i.e client and server forget about each other after completion of request.
+b)Connectionless: The connection between client and server is closed after completion of request.
+c) Media independent: Any type of data can be transferred over web using http protocol, until both client and server format using MIME types.
+d) Http methods: Http defines various methods  for different actions such as GET, POST, PUT n more.
+e) Caching support: Http provides suport for caching - improves performance by storing copies of respoonse , resuing them later.

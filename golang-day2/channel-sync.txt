@@ -1,0 +1,12 @@
+We can use channels to syncronize execution go-routines. - why is it needed? -
+
+
+
+-if your waiting for multiple go-routines to finish, u can prefer waitgroup.
+
+What theyre trying to do is:
+-start a worker go-routine.
+-Give it a channel to notify when their work is done.
+-Block until we recieve a notification from the worker on the corresponding channel.
+
+Document best example.

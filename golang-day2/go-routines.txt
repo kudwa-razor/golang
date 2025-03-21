@@ -1,0 +1,13 @@
+GO-ROUTINE:
+-A goroutine is a lightweight thread of execution.
+
+- we invoke a normal function to goroutine style this way:
+ go f("goroutine") i.e go f(s).
+
+ - You can also start a goroutine for an anonymous function call.
+ Ex: prefix go keyword in the start of the function itself.
+ go func(msg string) {
+        fmt.Println(msg)
+    }("going")
+
+- see gourtine code.

@@ -1,0 +1,23 @@
+Errors:
+- In go, there is no practice of explicitly catching error like other languages.
+-Errors are the last return value and are usually written with the return statement.
+-  "errors.New" - this builds a basic error value along with a error message(typed).
+- "nil" value in place of error indicates there was no error.
+
+
+-A sentinel error is a predeclared variable that is used to signify a specific error condition. -> ig this means creating customized error.
+
+- for printing error we use: fmt.Errorof("Big yerror mannn")
+
+- Wrapping or errors: basically one error inside another error inside another error...and we can add context to thi by:
+    using the %w verb in fmt.Errorf.
+
+    errors.Is , errors.As are query errors - their uses are given down.
+
+-It’s common to use an inline error check in the if line. (document from func main()).
+
+
+- errors.Is checks that a given error (or any error in its chain) matches a specific error value.
+
+ 
+
