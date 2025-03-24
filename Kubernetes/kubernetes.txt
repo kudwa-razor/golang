@@ -1,4 +1,7 @@
+This content is fully from Kubernetes KT ig.
+
 1st part of kuberenetes was literally copy pasted into gpt  to summarize for important points.
+
 
 -Kubernetes Components:
     1)Control Plane
@@ -252,4 +255,66 @@ kubectl get pods -o wide : gives more info about every pod like IP and more.
 Whenever your calling kubectl command, it is interacting with the API server.
 
 
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
 
+
+OVERVIEW OF PODS, CONTAINERS, K8s, DEPLOYEMENT, CLUSTERS using utube video "https://www.youtube.com/watch?v=B_X4l4HSgtc"
+
+1) NODE (Your application runs here): Smallest unit of computing hardware. 
+    It can be a physical server or virtual machine(VM) in cloud like AWS.
+    If smthng happens to a node, it can be ezily replaced and K8s will take care of load Distribution
+
+    A group of multiple nodes is Basically called a "NODE POOL" are further split into 2 types:
+        a) On demand nodepool  ---\ 
+                                   GPT both of these shit.
+        b) Spot node pool      ---/  
+
+
+- To store data personally, K8 uses "PERSISTANT VOLUMES"
+
+2) Container: To run application on a K8 cluster, you should package it as a container.
+    Containerization helps create self - contained execution environment.
+    You can add multiple apps in 1 container but best is to limit to 1 process for 1 container if possible.
+
+3) PODS (Unit of replication) : K8 doesnt run containers directly, instead  1 or more containers are bundled into higher level structure called PODS.
+    Any container inside a POD shares same resource and local network(ex :8080)
+    Containers in the same POD can ezily communicate with each other.
+    While replication, to scale up/down, we increase/decrease the no of PODS.
+
+    Disadv: Each POD usually has 2 or more containers. If 1 container has to be scaled up/down, the other 
+    containers present in the POD must also undergo the same. Can lead to resource waste and be expensive.
+
+    Ideal: 1 container should have 1 application.
+        PODS should remain as small as possible.
+        Best POD is if it has -main container which is tightly couple with -helper container/ sidecar.
+        helper container-> consists of things which are highly needed by main container.
+
+    
+PODS are basic unit of computation but are not directly created in cluster.Instead, K8 provides another higher level of abstraction called "DEPLOYEMENT"
+
+4) Deployement:Another level of abstraction over PODS. 
+->Its primary purpose is to declare how many replicas of a pod should be running at a timne.
+
+
+-> SO when deployement is added to the cluster, it will automatically spin up the requested no of PODS and monitor them.
+-> If a pod fails, the deployement will automatically recreate it.
+
+How to expose this application running on a cluster->deployement->POD to the internet? :
+ -open up a channel for communication. 
+ -There exists multiple ways to do so:
+    Load balancer
+    Ingress
+    Node port 
+    Proxy
+
+1st popular method: -If u want to expose the application directly, you can use the load balancer type. 
+                    It will map one application per load balancer.
+                    allows you to use http, grpc..and so on.
+
+2nd popular method: - Ingress controller , When using an ingress controller, you would share a single load balancer between all your services.
+                    Youve to use sub-domains and paths to direct traffic to a particular application.
+                    Only allow you to use http and https protocols. 
+                    It is said that it is more complicated to set up than simple load balancers.
